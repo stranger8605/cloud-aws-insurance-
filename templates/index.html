@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS EC2 Security Hardening Lab</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <div class="logo-text">
+                    <h1>CloudSec Lab</h1>
+                    <p>Securing AWS EC2 Instances</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="pulse-indicator" id="global-status-indicator"></span>
+                <span id="global-status-text">Disconnected</span>
+            </div>
+        </header>
+
+        <!-- Dashboard Grid -->
+        <main class="dashboard-grid">
+            <!-- Left Panel: Configurations & Details -->
+            <section class="left-panel">
+                <!-- Credentials Section -->
+                <div class="card glassmorphism" id="credentials-card">
+                    <div class="card-header">
+                        <h3>🔑 AWS Configuration</h3>
+                        <span class="badge" id="cred-status-badge">Checking...</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="aws-access-key">Access Key ID</label>
+                            <input type="password" id="aws-access-key" placeholder="Enter AWS Access Key ID" autocomplete="new-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="aws-secret-key">Secret Access Key</label>
+                            <input type="password" id="aws-secret-key" placeholder="Enter AWS Secret Access Key" autocomplete="new-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="aws-region">AWS Region</label>
+                            <input type="text" id="aws-region" placeholder="us-east-1" value="us-east-1">
+                        </div>
+                        <button class="btn btn-primary" id="btn-save-creds">Save Credentials</button>
+                    </div>
+                </div>
+
+                <!-- Actions Center -->
+                <div class="card glassmorphism">
+                    <div class="card-header">
+                        <h3>⚡ Action Controls</h3>
+                    </div>
+                    <div class="card-body controls-body">
+                        <button class="btn btn-action btn-deploy" id="btn-deploy">
+                            <span class="btn-icon">🚀</span>
+                            <div class="btn-label">
+                                <strong>Deploy Lab</strong>
+                                <span>Provision & Harden EC2</span>
+                            </div>
+                        </button>
+                        <button class="btn btn-action btn-cleanup" id="btn-cleanup">
+                            <span class="btn-icon">🧹</span>
+                            <div class="btn-label">
+                                <strong>Cleanup Lab</strong>
+                                <span>Tear down all resources</span>
+                            </div>
+                        </button>
+                        <button class="btn btn-secondary" id="btn-refresh">🔄 Refresh Resource Status</button>
+                    </div>
+                </div>
+
+                <!-- Resource Details -->
+                <div class="card glassmorphism" id="resources-card">
+                    <div class="card-header">
+                        <h3>📊 Deployed Resources</h3>
+                        <span class="badge badge-success" id="resource-status-badge">Not Deployed</span>
+                    </div>
+                    <div class="card-body info-body">
+                        <div class="info-row">
+                            <span class="info-label">Instance ID:</span>
+                            <span class="info-val" id="val-instance-id">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Public IP:</span>
+                            <span class="info-val select-all" id="val-public-ip">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Public DNS:</span>
+                            <span class="info-val select-all" id="val-public-dns">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Key Name:</span>
+                            <span class="info-val" id="val-key-name">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Monitoring:</span>
+                            <span class="info-val" id="val-monitoring">-</span>
+                        </div>
+                        
+                        <div class="ssh-connect-box" id="ssh-box" style="display: none;">
+                            <div class="ssh-box-header">
+                                <span>SSH Connection String</span>
+                                <button class="copy-btn" id="btn-copy-ssh">Copy</button>
+                            </div>
+                            <code id="ssh-command">ssh -i "project1-key.pem" ec2-user@...</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel: Live Logs Console -->
+            <section class="right-panel">
+                <div class="card console-card">
+                    <div class="console-header">
+                        <div class="console-status">
+                            <span class="dot dot-green"></span>
+                            <h4>Real-Time Execution Logs</h4>
+                        </div>
+                        <button class="console-clear-btn" id="btn-clear-console">Clear</button>
+                    </div>
+                    <div class="console-body" id="console-output">
+                        <div class="console-line system-line">[System] Web UI loaded. Ready to deploy or cleanup resources.</div>
+                        <div class="console-line system-line">[System] Please verify your AWS Credentials before deploying.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Main JavaScript App -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
